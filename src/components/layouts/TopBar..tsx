@@ -1,14 +1,24 @@
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../provider/AuthContext";
+import {signout as signoutService} from "../../services/user";
 
 export function TopBarComponent() {
-  const {setToken} = useAuth();
+  const {user, setAuthenticated} = useAuth();
   const navigate = useNavigate();
+  const signout = async () => {
+    try {
+      await signoutService(user.id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await setAuthenticated(false);
+      navigate("/", {replace: true});
+    }
+  };
 
   const handleLoout = () => {
-    setToken("");
-    navigate("/", {replace: true});
+    signout();
   };
 
   const sidebarToggle = () => {

@@ -49,7 +49,8 @@ export const validatePassword = (): validate | undefined => {
       message: "required",
     },
     pattern: {
-      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      value:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
       message: `at least 8 characters with a letter and a number.`,
     },
   };

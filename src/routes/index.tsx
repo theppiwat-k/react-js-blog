@@ -5,7 +5,7 @@ import {useAuth} from "../provider/AuthContext";
 import {Signin} from "../pages/auth/Signin";
 import {Signup} from "../pages/auth/Signup";
 import Home from "../pages/home/Home";
-import {BlockList} from "../pages/home/block/block-components/BlockList";
+import BlockList from "../pages/home/block/block-components/BlockList";
 import {BlockCreate} from "../pages/home/block/block-components/BlockCreate";
 import {BlockDetail} from "../pages/home/block/block-components/BlockDetail";
 import {TagList} from "../pages/home/block/tag-components/TagList";
@@ -14,7 +14,7 @@ import {UserList} from "../pages/home/user/user-components/UserList";
 import {GroupList} from "../pages/home/user/group-components/GroupList";
 
 const Routes = () => {
-  const {token} = useAuth();
+  const {authenticated} = useAuth();
 
   // Define public routes accessible to all users
   const routesForPublic: [] = [];
@@ -85,7 +85,7 @@ const Routes = () => {
   // Combine and conditionally include routes based on authentication status
   const router = createBrowserRouter([
     ...routesForPublic,
-    ...(!token ? routesForNotAuthenticatedOnly : []),
+    ...(authenticated === false ? routesForNotAuthenticatedOnly : []),
     ...routesForAuthenticatedOnly,
   ]);
 

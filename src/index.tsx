@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import {AuthProvider} from "./provider/AuthContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -11,13 +11,18 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <header>
-      <link
-        href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
-        rel="stylesheet"
-      />
-    </header>
-    <App />
+    <>
+      <header>
+        <link
+          href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css"
+          rel="stylesheet"
+        />
+      </header>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </>
+    ,
   </React.StrictMode>,
 );
 

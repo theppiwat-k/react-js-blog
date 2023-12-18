@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import {FormProvider, useForm} from "react-hook-form";
 import {Input} from "../../components/forms/Input";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {PrimaryButton} from "../../components/buttons/PrimaryButton";
 import {
   validateEmail,
   validatePassword,
   validateUsername,
 } from "../../utils/validations";
-
+import {register as registerService} from "../../services/user";
+import {IUser} from "../../models/user";
 interface IRegisrer {
   username: string;
   password: string;
@@ -17,16 +19,28 @@ interface IRegisrer {
 }
 
 export function Signup() {
+  const navigate = useNavigate();
   const methods = useForm<IRegisrer>();
-
-  const onSubmit = methods.handleSubmit(data => {
-    console.log(data);
-    methods.reset();
+  const onSubmit = methods.handleSubmit(async ({email, password, username}) => {
+    try {
+      const body: IUser = {
+        email: email,
+        password: password,
+        username: username,
+      };
+      const register = await registerService(body);
+      console.log(register);
+      navigate("/login", {replace: true});
+      methods.reset();
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  const validateConfirmPassword = (value: string) => {
-    const passwordValue = methods.getValues("password");
-    if (value === passwordValue) {
+  const validateConfirmPassword = () => {
+    const password = methods.getValues("password");
+    const confirmPassword = methods.getValues("confirmPassword");
+    if (password === confirmPassword) {
       return true;
     } else {
       return "passwords do not match";
@@ -56,11 +70,13 @@ export function Signup() {
                 placeholder="Enter password"
                 className="mb-2"
                 autocomplete="new-password"
-                validation={validatePassword()}
+                validation={{
+                  ...validatePassword(),
+                }}
               />
               <Input
                 type="password"
-                id="confirmpassword"
+                id="confirmPassword"
                 label="Confirm Password"
                 placeholder="Enter confirm password"
                 className="mb-2"
